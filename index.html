@@ -987,9 +987,9 @@
 
     /* ===== EMAILJS SETUP ===== */
     // ⚠️  REPLACE THESE THREE VALUES WITH YOUR OWN (see guide below)
-    const EMAILJS_PUBLIC_KEY  = 'YM492zmCPXn9VOovGO';
+    const EMAILJS_PUBLIC_KEY  = 'M492zmCPXn9VOovGO';
     const EMAILJS_SERVICE_ID  = 'service_ueexhla';
-    const EMAILJS_TEMPLATE_ID = 'Ytemplate_2rhoxqa';
+    const EMAILJS_TEMPLATE_ID = 'template_2rhoxqa';
 
     emailjs.init(EMAILJS_PUBLIC_KEY);
 
@@ -999,6 +999,16 @@
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
+      const email = document.getElementById('from_email').value.trim();
+      if (!email.includes('@')) {
+        formStatus.textContent = '❌ Please enter a valid email address.';
+        formStatus.className = 'error';
+        formStatus.style.display = 'block';
+        setTimeout(() => {
+          formStatus.style.display = 'none';
+        }, 3000);
+        return;
+      }
       submitBtn.textContent = 'Sending…';
       submitBtn.disabled = true;
       formStatus.className = '';
@@ -1008,11 +1018,19 @@
         .then(() => {
           formStatus.textContent  = '✅ Message sent! I\'ll reply soon.';
           formStatus.className    = 'success';
+          formStatus.style.display = 'block';
           form.reset();
+          setTimeout(() => {
+            formStatus.style.display = 'none';
+          }, 3000);
         })
         .catch(() => {
           formStatus.textContent = '❌ Something went wrong. Please try again.';
           formStatus.className   = 'error';
+          formStatus.style.display = 'block';
+          setTimeout(() => {
+            formStatus.style.display = 'none';
+          }, 3000);
         })
         .finally(() => {
           submitBtn.textContent = 'Send Message ✉️';

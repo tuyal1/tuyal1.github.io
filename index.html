@@ -26,6 +26,8 @@
       --card:        #ffffff;
       --serif:       'DM Serif Display', Georgia, serif;
       --sans:        'DM Sans', sans-serif;
+      --card-hover: rgba(255,255,255,0.65);
+      --bg-hover: rgba(255,255,255,0.55);
     }
 
     html { scroll-behavior: smooth; }
@@ -208,9 +210,19 @@
       justify-content: center;
       align-items: center;
     }
+    .avatar-photo {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      z-index: 2;
+    }
     .avatar-ring {
       width: 320px;
       height: 320px;
+      /* width: clamp(200px, 40vw, 320px);   */
+      /* min 200px, max 320px, scales with viewport */
+      /* height: clamp(200px, 40vw, 320px); */
       border-radius: 50%;
       background: linear-gradient(135deg, var(--teal-pale) 0%, #d1fae5 100%);
       display: flex;
@@ -244,9 +256,47 @@
       color: var(--dark);
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       animation: float 3s ease-in-out infinite;
+      z-index: 10;   
+      transform-origin: center center;
     }
-    .badge-1 { top: 10%; right: -10%; animation-delay: 0s; }
-    .badge-2 { bottom: 15%; left: -12%; animation-delay: 1.2s; }
+    /* Default float animation */
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-8px) scale(1); }
+    }
+    /* Scale for tablets */
+    @media (max-width: 768px) {
+      @keyframes float {
+        0%, 100% { transform: translateY(0) scale(0.8); }
+        50% { transform: translateY(-8px) scale(0.8); }
+      }
+    }
+    /* Scale for mobile */
+    @media (max-width: 480px) {
+      @keyframes float {
+        0%, 100% { transform: translateY(0) scale(0.1); }
+        50% { transform: translateY(-8px) scale(0.1); }
+      }
+    }
+    .badge-1 { top: 10%; right: clamp(-55px, -22%, -25px); animation-delay: 0s; }
+    .badge-2 { bottom: 15%; left: clamp(-80px, -32%, -28px); animation-delay: 1.2s; }
+    /* Responsive badge sizes */
+    @media (max-width: 768px) {
+      .floating-badge {
+        padding: 0.4rem 0.75rem;   /* slightly smaller */
+        font-size: 0.68rem;
+      }
+      /* Optional nudge for tablet: move badge-2 further left */
+      .badge-2 { left: -50px; }
+    }
+    @media (max-width: 480px) {
+      .floating-badge {
+        padding: 0.3rem 0.6rem;    /* smallest */
+        font-size: 0.6rem;
+      }
+      /* Move badge-2 further left on mobile */
+      .badge-2 { left: 1000px; }
+    }
     @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
 
     /* ===== SECTION SHARED ===== */
@@ -342,11 +392,13 @@
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 1.8rem;
-      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      transition: background 0.25s ease, border-color 0.25s ease;
       cursor: default;
       position: relative;
       overflow: hidden;
     }
+
+    /* top accent bar stays the same */
     .project-card::before {
       content: '';
       position: absolute;
@@ -357,7 +409,14 @@
       transform-origin: left;
       transition: transform 0.3s ease;
     }
-    .project-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(13,148,136,0.12); border-color: rgba(13,148,136,0.3); }
+
+    /* NEW: no translateY, no heavy shadow */
+    .project-card:hover {
+      background: var(--card-hover);
+      border-color: rgba(13,148,136,0.35);
+    }
+
+    /* keep the top bar animation */
     .project-card:hover::before { transform: scaleX(1); }
     .project-icon {
       width: 44px; height: 44px;
@@ -399,7 +458,7 @@
       border-radius: 14px;
       padding: 1.5rem 1.2rem;
       text-align: center;
-      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      transition: border-color 0.2s, background 0.2s;;
     }
     .skill-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(13,148,136,0.1); border-color: rgba(13,148,136,0.3); }
     .skill-icon { font-size: 2rem; margin-bottom: 0.6rem; }
@@ -593,7 +652,8 @@
       </div>
       <div class="hero-avatar">
         <div class="avatar-ring">
-          <span class="avatar-initials">TS</span>
+          <!-- <span class="avatar-initials">TS</span> -->
+          <img src="profilePort.png" alt="Tuyal Shrestha" class="avatar-photo">
           <div class="floating-badge badge-1">🧠 ML Engineer</div>
           <div class="floating-badge badge-2">🎓 CE Graduate</div>
         </div>
@@ -615,17 +675,18 @@
             <span class="about-stat-num">5+</span>
             <span class="about-stat-label">ML Projects Completed</span>
           </div>
-          <div class="about-stat">
+          <!-- <div class="about-stat">
             <span class="about-stat-num">3+</span>
             <span class="about-stat-label">Years of Coding Experience</span>
-          </div>
+          </div> -->
           <div class="about-stat">
             <span class="about-stat-num">2</span>
             <span class="about-stat-label">Research Areas (NLP & CV)</span>
           </div>
           <div class="about-links" style="margin-top:1.5rem;">
-            <a href="https://github.com" target="_blank" class="about-link">⬡ GitHub</a>
-            <a href="https://linkedin.com" target="_blank" class="about-link">in LinkedIn</a>
+            <a href="https://github.com/tuyal1" target="_blank" class="about-link">⬡ GitHub</a>
+            <a href="https://www.linkedin.com/in/tuyal-shrestha-250a5b359/" target="_blank" class="about-link">in LinkedIn</a>
+            <a href="https://www.instagram.com/tuyal.stha/" target="_blank" class="about-link">Instagram</a>
           </div>
         </div>
         <div class="about-text">
@@ -646,7 +707,7 @@
             contributing to open-source projects, and occasionally hiking in the mountains near Kathmandu.
           </p>
           <p style="margin-top:1.2rem;">
-            <strong>📍 Kathmandu, Nepal &nbsp;|&nbsp; 📧 alex@example.com</strong>
+            <strong>📍 Bhaktapur, Nepal &nbsp;|&nbsp; 📧 tuyalshrestha@gmail.com</strong>
           </p>
         </div>
       </div>
